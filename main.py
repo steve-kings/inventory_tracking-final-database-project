@@ -7,14 +7,14 @@ from typing import List, Optional
 import datetime
 from datetime import date
 
-# Database configuration
-DATABASE_URL = "mysql+pymysql://root:@kings635@localhost:3306/inventory_tracking_db"
+# Database configuration - Updated with your MySQL credentials
+DATABASE_URL = "mysql+pymysql://root:%40kings635@localhost:3306/inventory_tracking_db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # FastAPI app
-app = FastAPI(title="Inventory Tracking API", version="1.0.0")
+app = FastAPI(title="Inventory Tracking API by Stephen", version="1.0.0")
 
 # ===============================================
 # DATABASE MODELS
@@ -157,7 +157,7 @@ def get_db():
 
 @app.get("/")
 async def root():
-    return {"message": "Inventory Tracking API by Stephen"}
+    return {"message": "Inventory Tracking API by Stephen", "status": "Running Successfully!"}
 
 # Category endpoints
 @app.post("/categories/", response_model=CategoryResponse)
@@ -343,4 +343,4 @@ def get_low_stock_products(db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

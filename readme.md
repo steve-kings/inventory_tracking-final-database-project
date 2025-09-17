@@ -30,6 +30,8 @@ The system uses MySQL with the following entities:
 
 ### Installation Steps
 
+pip install fastapi uvicorn sqlalchemy pymysql pydantic
+
 1. **Clone the repository**
 
 ```bash
