@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, Integer, String, Text, DECIMAL, DateTime, ForeignKey, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
@@ -15,6 +16,15 @@ Base = declarative_base()
 
 # FastAPI app
 app = FastAPI(title="Inventory Tracking API by Stephen", version="1.0.0")
+
+# Add CORS middleware - THIS IS THE KEY FIX!
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # ===============================================
 # DATABASE MODELS
@@ -157,7 +167,23 @@ def get_db():
 
 @app.get("/")
 async def root():
-    return {"message": "Inventory Tracking API by Stephen", "status": "Running Successfully!"}
+    return {
+        "message": "Inventory Tracking API by Stephen", 
+        "status": "Running Successfully!",
+        "endpoints": {
+            "docs": "/docs",
+            "categories": "/categories/",
+            "suppliers": "/suppliers/",
+            "products": "/products/",
+            "inventory": "/inventory/",
+            "low_stock": "/inventory/low-stock/"
+        }
+    }
+
+# Test endpoint to check API connectivity
+@app.get("/test")
+async def test():
+    return {"message": "API is working!", "timestamp": datetime.datetime.now()}
 
 # Category endpoints
 @app.post("/categories/", response_model=CategoryResponse)
